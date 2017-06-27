@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, ListView, Image } from 'react-native';
-import URExampleSampleCell from './URExampleSampleCell';
+import URExampleSampleCell from './Sources/URExampleSampleCell';
 
 export default class App extends React.Component {
   constructor() {
