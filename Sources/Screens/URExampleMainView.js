@@ -3,6 +3,10 @@ import { StyleSheet, Text, View, Button, ListView, Image } from 'react-native';
 import URExampleSampleCell from '../URExampleCell';
 
 export class URExampleMainView extends React.Component {
+    static navigationOptions = {
+        title: 'Welcome',
+    }
+    
   constructor() {
     super()
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
@@ -21,6 +25,7 @@ export class URExampleMainView extends React.Component {
   }
 
   render() {
+      const { navigate } = this.props.navigation
     return (
       <View style={styles.container}>
         <Text>Open up App.js to start working on your app!</Text>
@@ -28,7 +33,9 @@ export class URExampleMainView extends React.Component {
         <Text>Shake your phone to open the developer menu.</Text>
         <Text>머하냐</Text>
         <Button
-          onPress={this.onPressLearnMore}
+          onPress={() => {
+            navigate('Detail', {name: 'Jane'})
+          }}
           title="Learn More"
           color="#841584"
           accessibilityLabel="Learn more about this purple button"
@@ -43,11 +50,12 @@ export class URExampleMainView extends React.Component {
           }
         />
       </View>
-    );
+    )
   }
 
   onPressLearnMore() {
-    console.log("onPressLearnMore")    
+    console.log("onPressLearnMore")
+      
   }
 }
 
