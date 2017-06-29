@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, ListView, Image } from 'react-native';
 
-export default class URExampleSampleCell extends React.Component {
+export default class URExampleCell extends React.Component {
     render() {
         return (
             <View style={styles.container} onTouchEnd={this.onTouched}>
