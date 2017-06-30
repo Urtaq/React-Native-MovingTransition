@@ -96,4 +96,9 @@ build/
 local.properties
 *.iml
 
+# BUCK
+buck-out/
+\.buckd/
+*.keystore
+
 # End of https://www.gitignore.io/api/node
