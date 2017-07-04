@@ -5,15 +5,25 @@ import {
   StackNavigator
 } from 'react-navigation';
 
-export class URExampleDetailView extends React.Component {    
+export class URExampleDetailView extends React.Component {  
+    static navigationOptions = ({navigation}) => ({
+        title: `Title : ${navigation.state.params.data.title}`,
+    })
+
+    componentDidMount() {
+        console.log('componentDidMount')
+    }
+
     render() {
-        const paramsOfNav = this.props.navigation.state
-        console.log('params is ' + paramsOfNav.image)
+        const { params } = this.props.navigation.state
+        console.log('URExampleDetailView')
+        console.log(this.props.navigation.state.params)
+        console.log(params)
         return (
         <View style={styles.container}>
             <Text>여기는 디테일</Text>
-            <Image style={styles.image} source={paramsOfNav.image} />
-            <Text style={styles.text}></Text>
+            <Image style={styles.image} source={params.data.img} blurRadius={1} />
+            <Text style={styles.text}>여기는 밑</Text>
         </View>
         )
     }
@@ -24,7 +34,11 @@ const styles = StyleSheet.create({
         flex: 1
     },
     image: {
-        flex: 1
+        flex: 1,
+        height: '100%',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     text: {
         flex: 1

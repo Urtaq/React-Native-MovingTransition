@@ -4,11 +4,15 @@ import { StyleSheet, Text, View, Button, ListView, Image } from 'react-native';
 export default class URExampleCell extends React.Component {
     constructor() {
         super()
+
+        this.state = {
+            isTouchMoved: false
+        }
     }
     render() {
         console.log(JSON.stringify('URExampleCell\'props is' + JSON.stringify(this.props)))
         return (
-            <View style={styles.container} onTouchStart={this.onTouched}>
+            <View style={styles.container} onTouchMove={this.onTouchMoved} onTouchEnd={this.onTouched}>
                 <Image ref={(image) => { this.image = image}} style={styles.rowImg} source={this.props.img} onLoadEnd={this.onImageLoaded} />
                 <Text style={styles.rowText}>{this.props.title}</Text>
                 {this.addImages(2)}
@@ -20,12 +24,14 @@ export default class URExampleCell extends React.Component {
         var images = []
         for (i=0;i<count;i++) {
             images.push(
-                <View key={i} width='100%' height='100%'>
-            <Image style={styles.rowSubImg} source={this.props.rowImg} />
-            <Text style={styles.rowSubText}>{i}</Text>
+                <View key={i} style={styles.subContainer}>
+                    <Image style={styles.rowSubImg} source={this.props.img} />
+                    <Text style={styles.rowSubText}>{i}</Text>
                 </View>
             )
         }
+
+        return images
 
         return (
         <View style={styles.rowImg2}>
@@ -33,23 +39,39 @@ export default class URExampleCell extends React.Component {
         </View>)
     }
 
+    onTouchMoved = (target) => {
+        console.log('onTouchMoved')
+
+        this.setState({isTouchMoved: true})
+    }
+
     onTouched = (target) => {
         console.log('onTouched')
 
-        console.log(this.props)
+        if (!this.state.isTouchMoved) {
+            this.props.onPress(this.props.data)
+        }
 
-        this.props.onPress(this.image.props.source)
+        this.setState({isTouchMoved: false})
     }
 
     onImageLoaded = () => {
         console.log('onImageLoaded')
 
-        console.log('this.image.source:' + this.image.props.source)
+        console.log(this.image.props.source)
     }
 }
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+        flexDirection: 'row',
+        height: 80,
+        // backgroundColor: '#ff0',
+        alignItems: 'center',
+        justifyContent: 'center',
+  },
+  subContainer: {
         flex: 1,
         flexDirection: 'row',
         height: 80,
@@ -73,7 +95,7 @@ const styles = StyleSheet.create({
       borderColor: '#fff'
   },
   rowSubImg: {
-      flex: 1,
+      flex: 2,
       height: '100%',
       alignItems: 'center',
       justifyContent: 'center',
@@ -86,7 +108,7 @@ const styles = StyleSheet.create({
     //   backgroundColor: '#a0a'
   },
   rowSubText: {
-      flex:2,
+      flex:1,
       backgroundColor: '#f0f'
   }
 })
