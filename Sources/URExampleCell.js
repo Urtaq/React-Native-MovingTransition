@@ -1,5 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, ListView, Image } from 'react-native';
+import { 
+    StyleSheet, 
+    Text, 
+    View, 
+    Button, 
+    ListView, 
+    Image,
+    TouchableOpacity
+} from 'react-native';
 
 export default class URExampleCell extends React.Component {
     constructor() {
@@ -12,11 +20,11 @@ export default class URExampleCell extends React.Component {
     render() {
         console.log(JSON.stringify('URExampleCell\'props is' + JSON.stringify(this.props)))
         return (
-            <View style={styles.container} onTouchMove={this.onTouchMoved} onTouchEnd={this.onTouched}>
+            <TouchableOpacity style={styles.container} onPress={this.onTouched} onTouchMove={this.onTouchMoved} onTouchEnd={this.onTouched}>
                 <Image ref={(image) => { this.image = image}} style={styles.rowImg} source={this.props.img} onLoadEnd={this.onImageLoaded} />
                 <Text style={styles.rowText}>{this.props.title}</Text>
                 {this.addImages(2)}
-            </View>
+            </TouchableOpacity>
         )
     }
 
