@@ -49,7 +49,6 @@ export class URExampleMainView extends React.Component {
           color="#841584"
           accessibilityLabel="Learn more about this purple button"
         />
-        { this.state.movableView }
           <View style={styles.subContainer}>
             <ListView ref={(list) => this.list = list} style={styles.list}
               dataSource={this.state.dataSource}
@@ -66,6 +65,7 @@ export class URExampleMainView extends React.Component {
               onScroll={this._onScroll}
               onScrollAnimationEnd={this._onScrollAnimationEnd}
               />
+        { this.state.movableView }
         </View>
       </Animated.View>
     )
@@ -80,16 +80,21 @@ export class URExampleMainView extends React.Component {
     //   console.log('data is ' + data.title + ', ' + data.img)
     console.log('this.state.isScroll is ' + this.state.isScroll)
 
-    this.addMovableView()
+    this.addMovableView(data)
 
     Animated.timing(this.state.opacity, {
       toValue: 0.1,
       duration: this.state.animationDuration
     }).start((finish) => {
         const { navigate } = this.props.navigation
-        navigate('Detail', {data: data})
+        navigate('Detail', {data: data, finishAction: this._onTransitionEnd.bind(this)})
     }
     )
+  }
+
+  _onTransitionEnd = () => {
+    console.log("_onTransitionEnd")
+    this.onPressLearnMore()
   }
 
   onPressLearnMore() {
@@ -112,15 +117,14 @@ export class URExampleMainView extends React.Component {
     })
   }
 
-  addMovableView() {
+  addMovableView(data) {
     console.log("addMovableView")
 
     const movableView = this.state.movableView
     if (Array.isArray(movableView)) {
       movableView.push(
-        <BlurView key={movableView.length} style={styles.movable}
+        <BlurView ref={(blur) => { this.blur = blur }} key={movableView.length} style={styles.blur}
         blurType="light">
-          <Text>얍얍</Text>
         </BlurView>
       )
     }
@@ -152,6 +156,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
     width: "100%",
     height: "100%"
+  },
+  blur: {
+    flex: 1,
+    position: "absolute",
+    width: '100%',
+    height: '100%',
+    borderColor: '#fff0'
   },
   movable: {
     flex: 1,
