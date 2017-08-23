@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, ListView, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, ListView, Image, WebView } from 'react-native';
 import {
   DrawerNavigator,
   StackNavigator
@@ -24,6 +24,11 @@ export class URExampleDetailView extends React.Component {
             <Text>여기는 디테일</Text>
             <Image style={styles.image} source={params.data.img} blurRadius={1} />
             <Text style={styles.text}>여기는 밑</Text>
+            <WebView 
+            style={styles.web}
+            source={{uri: 'https://m.zigbang.com/app/map/reactmap.html?37.485851784894855,130.90828949055285'}}
+            scrollEnabled={false}
+            />
         </View>
         )
     }
@@ -41,6 +46,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     text: {
+        flex: 1
+    },
+    web: {
         flex: 1
     }
 })

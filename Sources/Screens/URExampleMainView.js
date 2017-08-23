@@ -88,8 +88,7 @@ export class URExampleMainView extends React.Component {
     }).start((finish) => {
         const { navigate } = this.props.navigation
         navigate('Detail', {data: data, finishAction: this._onTransitionEnd.bind(this)})
-    }
-    )
+    })
   }
 
   _onTransitionEnd = () => {
@@ -123,8 +122,9 @@ export class URExampleMainView extends React.Component {
     const movableView = this.state.movableView
     if (Array.isArray(movableView)) {
       movableView.push(
-        <BlurView ref={(blur) => { this.blur = blur }} key={movableView.length} style={styles.blur}
-        blurType="light">
+        <BlurView ref={(blur) => { this.blur = blur }} key={movableView.length} style={styles.blur} blurType="light">
+          <Animated.Image />
+          <Image style={styles.movable} source={data.img} />
         </BlurView>
       )
     }
@@ -166,7 +166,6 @@ const styles = StyleSheet.create({
   },
   movable: {
     flex: 1,
-    position: 'absolute',
     width: '100%',
     height: '100%',
     backgroundColor: '#fff'

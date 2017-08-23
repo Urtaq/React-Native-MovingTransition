@@ -2,6 +2,7 @@
   "name": "React-Native-MovingTransition",
   "version": "0.1.0",
   "private": true,
+  "main": "index.ios.js",
   "devDependencies": {
     "jest-expo": "~18.0.0",
     "react-test-renderer": "16.0.0-alpha.12"
@@ -16,6 +17,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "expo": "^19.0.1",
     "react": "16.0.0-alpha.12",
     "react-native": "^0.45.1",
     "react-native-blur": "^3.1.2",
