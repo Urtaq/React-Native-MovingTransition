@@ -14,14 +14,21 @@ export default class URExampleCell extends React.Component {
         super()
 
         this.state = {
-            isTouchMoved: false
+            isTouchMoved: false,
+            cellImageWidth: 0,
+            cellimageHeight: 0
         }
     }
     render() {
         console.log(JSON.stringify('URExampleCell\'props is' + JSON.stringify(this.props)))
         return (
             <TouchableOpacity style={styles.container} onPress={this.onTouched} onTouchMove={this.onTouchMoved} onTouchEnd={this.onTouched}>
-                <Image ref={(image) => { this.image = image}} style={styles.rowImg} source={this.props.img} onLoadEnd={this.onImageLoaded} />
+                <Image ref={(image) => { this.image = image}} style={styles.rowImg} source={this.props.img} onLoadEnd={this.onImageLoaded} 
+                    onLayout={(event) => { 
+                        this.state.cellImageWidth = event.nativeEvent.layout.width
+                        this.state.cellImageHeight = event.nativeEvent.layout.height
+                    }}
+                    />
                 <Text style={styles.rowText}>{this.props.title}</Text>
                 {this.addImages(2)}
             </TouchableOpacity>
@@ -57,7 +64,7 @@ export default class URExampleCell extends React.Component {
         console.log('onTouched')
 
         if (!this.state.isTouchMoved) {
-            this.props.onPress(this.props.data)
+            this.props.onPress(this.props.data, this)
         }
 
         this.setState({isTouchMoved: false})

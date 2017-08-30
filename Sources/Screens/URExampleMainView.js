@@ -6,7 +6,8 @@ import {
   Button, 
   ListView, 
   Image,
-  Animated
+  Animated,
+  Dimensions
 } from 'react-native';
 import { BlurView } from 'react-native-blur'
 
@@ -26,15 +27,18 @@ export class URExampleMainView extends React.Component {
     var ROWS = []
     for (var i = 0; i < ImageAssets.images.length; i++) {
         ROWS[i] = {title: Strings.cellTitles[i],
-                   img: ImageAssets.images[i],
-                   rowId: i}
+                    img: ImageAssets.images[i],
+                    rowId: i}
     }
     this.state = {
       movableView: [],
       rows: ROWS,
       dataSource: ds.cloneWithRows(ROWS),
       opacity: new Animated.Value(1),
-      animationDuration: 1000
+      transitionOpacity: new Animated.Value(0),
+      animationDuration: 1000,
+      cellImageWidth: new Animated.Value(0),
+      cellImageHeight: new Animated.Value(0)
     }
   }
 
@@ -54,6 +58,7 @@ export class URExampleMainView extends React.Component {
               dataSource={this.state.dataSource}
               renderRow={(rowData) => {
                 console.log('rowData is ' + rowData.title + ', ' + rowData.img)
+                //this.makeMovableView(rowData)
                 return (
                   <URExampleSampleCell data={rowData} title={rowData.title} 
                   img={rowData.img} 
@@ -75,19 +80,40 @@ export class URExampleMainView extends React.Component {
       console.log('onScroll')
   }
 
-  onPressRow(data) {
+  onPressRow(data, cell) {
     console.log('onPressRow')
     //   console.log('data is ' + data.title + ', ' + data.img)
     console.log('this.state.isScroll is ' + this.state.isScroll)
 
-    this.addMovableView(data)
+    this.makeMovableView(data)
+    this.prepareMovingView(cell)
 
-    Animated.timing(this.state.opacity, {
-      toValue: 0.1,
-      duration: this.state.animationDuration
-    }).start((finish) => {
+    Animated.parallel([
+      Animated.timing(this.state.opacity, {
+        toValue: 0.1,
+        duration: this.state.animationDuration
+      }),
+      Animated.timing(this.state.transitionOpacity, {
+        toValue: 1.0,
+        duration: this.state.animationDuration
+      }),
+      Animated.timing(this.state.cellImageWidth, {
+        toValue: Dimensions.get('window').width,
+        duration: this.state.animationDuration
+      }),
+      Animated.timing(this.state.cellImageHeight, {
+        toValue: Dimensions.get('window').height,
+        duration: this.state.animationDuration
+      })
+    ]).start((finish) => {
         const { navigate } = this.props.navigation
         navigate('Detail', {data: data, finishAction: this._onTransitionEnd.bind(this)})
+        
+        if (this.state.movableView.length > 0) {
+          this.setState({
+            movableView: []
+          })
+        }
     }
     )
   }
@@ -107,30 +133,56 @@ export class URExampleMainView extends React.Component {
       }
     }
 
-    Animated.timing(this.state.opacity, {
-      toValue: 1.0,
-      duration: 0.0
-    }).start()
-
+    Animated.parallel([
+      Animated.timing(this.state.opacity, {
+        toValue: 1.0,
+        duration: 0.0
+      }),
+      Animated.timing(this.state.transitionOpacity, {
+        toValue: 0.0,
+        duration: 0.0
+      }),
+      Animated.timing(this.state.cellImageWidth, {
+        toValue: 0,
+        duration: 0.0
+      }),
+      Animated.timing(this.state.cellImageHeight, {
+        toValue: 0,
+        duration: 0.0
+      })
+    ]).start()
+    
     this.setState({
       movableView: movableView
     })
   }
 
-  addMovableView(data) {
-    console.log("addMovableView")
+  makeMovableView(data) {
+    console.log("makeMovableView")
+    console.log(data)
+
+    const extraStyle = { opacity: this.state.transitionOpacity,
+                          width: this.state.cellImageWidth,
+                          height: this.state.cellImageHeight
+                        }
 
     const movableView = this.state.movableView
     if (Array.isArray(movableView)) {
       movableView.push(
         <BlurView ref={(blur) => { this.blur = blur }} key={movableView.length} style={styles.blur}
         blurType="light">
+          <Animated.Image style={[styles.movable, extraStyle]} source={data.img} />
         </BlurView>
       )
     }
+  }
+
+  prepareMovingView(cell) {
+    console.log("prepareMovingView")
 
     this.setState({
-      movableView: movableView
+      cellImageWidth: new Animated.Value(cell.state.cellImageWidth),
+      cellImageHeight: new Animated.Value(cell.state.cellImageHeight)
     })
   }
 }
@@ -169,6 +221,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
+    backgroundColor: '#fff'
+  },
+  movableImage: {
+    flex: 1,
     backgroundColor: '#fff'
   }
 });
