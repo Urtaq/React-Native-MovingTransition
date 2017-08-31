@@ -1,3 +1,5 @@
+"use strict";
+
 import React from 'react';
 import { 
     StyleSheet, 
@@ -37,7 +39,7 @@ export default class URExampleCell extends React.Component {
 
     addImages = (count) => {
         var images = []
-        for (i=0;i<count;i++) {
+        for (var i=0;i<count;i++) {
             images.push(
                 <View key={i} style={styles.subContainer}>
                     <Image style={styles.rowSubImg} source={this.props.img} />
