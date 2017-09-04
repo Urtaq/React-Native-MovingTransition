@@ -38,7 +38,7 @@ export class URExampleMainView extends React.Component {
       rows: ROWS,
       dataSource: ds.cloneWithRows(ROWS),
       opacity: new Animated.Value(1),
-      animationDuration: 1000,
+      animationDuration: 3000,
       cellImageWidth: new Animated.Value(0),
       cellImageHeight: new Animated.Value(0)
     }
@@ -55,7 +55,7 @@ export class URExampleMainView extends React.Component {
           color="#841584"
           accessibilityLabel="Learn more about this purple button"
         />
-          <Animated.View style={[styles.subContainer, opacity]}>
+          <Animated.View style={[styles.subContainer1, opacity]}>
             <ListView ref={(list) => this.list = list} style={styles.list}
               dataSource={this.state.dataSource}
               renderRow={(rowData) => {
@@ -70,7 +70,8 @@ export class URExampleMainView extends React.Component {
               }
               onScroll={this._onScroll}
               onScrollAnimationEnd={this._onScrollAnimationEnd}
-              />
+            />
+            <View style={styles.subContainer2} />
         </Animated.View>
         { this.state.movableView }
       </View>
@@ -91,14 +92,17 @@ export class URExampleMainView extends React.Component {
       Animated.parallel([
       Animated.timing(this.state.opacity, {
         toValue: 0.1,
+        easing: Easing.bounce,
         duration: this.state.animationDuration
       }),
       Animated.timing(this.state.cellImageWidth, {
         toValue: Dimensions.get('window').width,
+        easing: Easing.bounce,
         duration: this.state.animationDuration
       }),
       Animated.timing(this.state.cellImageHeight, {
         toValue: Dimensions.get('window').height,
+        easing: Easing.bounce,
         duration: this.state.animationDuration
       })
     ]).start((finish) => {
@@ -158,7 +162,7 @@ export class URExampleMainView extends React.Component {
       movableView.push(
         <BlurView ref={(blur) => { this.blur = blur }} key={movableView.length} style={styles.blur}
         blurType="light">
-          <Animated.Image style={[styles.movable, extraStyle]} source={data.img} />
+          <Animated.Image style={[styles.movable, extraStyle]} source={data.img} resizeMode="contain" />
         </BlurView>
       )
     }
@@ -199,7 +203,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  subContainer: {
+  subContainer1: {
+    flex: 2,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: "100%",
+    height: "100%"
+  },
+  subContainer2: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
