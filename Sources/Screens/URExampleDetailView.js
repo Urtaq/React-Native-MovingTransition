@@ -24,7 +24,7 @@ export class URExampleDetailView extends React.Component {
         return (
         <View style={styles.container}>
             <Text>여기는 디테일</Text>
-            <Image style={styles.image} source={params.data.img} blurRadius={1} />
+            <Image style={styles.image} source={params.data.img} resizeMode="contain" />
             <Text style={styles.text}>여기는 밑</Text>
         </View>
         )
