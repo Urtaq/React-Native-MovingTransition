@@ -12,16 +12,16 @@ import {
   Dimensions,
   Easing
 } from 'react-native';
-import { BlurView } from 'react-native-blur'
+import { BlurView } from 'react-native-blur';
 
 import URExampleSampleCell from '../URExampleCell';
-import ImageAssets from './../../ImageAssets'
-import Strings from './../../Strings'
+import ImageAssets from './../../ImageAssets';
+import Strings from './../../Strings';
 
 export class URExampleMainView extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
-    }
+    };
     
   constructor() {
     super()
@@ -62,8 +62,8 @@ export class URExampleMainView extends React.Component {
                 console.log('rowData is ' + rowData.title + ', ' + rowData.img)
                 return (
                   <URExampleSampleCell data={rowData} title={rowData.title} 
-                  img={rowData.img} 
-                  onPress={this.onPressRow.bind(this)} 
+                    img={rowData.img} 
+                    onPress={this.onPressRow.bind(this)} 
                   />
                 )
                 }
